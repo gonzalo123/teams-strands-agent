@@ -1,0 +1,46 @@
+[project]
+name = "teams"
+version = "0.1.0"
+description = "Asynchronous Teams messages with FastAPI, Redis and Strands Agents"
+readme = "README.md"
+authors = [
+    {name = "Gonzalo Ayuso",email = "gonzalo123@gmail.com"}
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi (>=0.115,<1)",
+    "uvicorn (>=0.34,<1)",
+    "pydantic-settings (>=2.7,<3)",
+    "httpx (>=0.28,<1)",
+    "rq (>=2.8,<3)",
+    "redis (>=6,<8)",
+    "strands-agents (>=1,<2)",
+    "click (>=8,<9)",
+    "boto3 (>=1.40,<2)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project.scripts]
+teams-agent = "teams_agent.cli:main"
+
+[tool.poetry]
+packages = [{include = "teams_agent", from = "src"}]
+
+[tool.pytest.ini_options]
+testpaths = ["src/tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[dependency-groups]
+dev = [
+    "pytest (>=8,<10)",
+    "fakeredis[lua] (>=2.30,<3)",
+    "ruff (>=0.11,<1)"
+]

@@ -1,0 +1,80 @@
+{
+  "source": "fictional demo data",
+  "snapshot": "Fixed simulation; all relative times refer to this snapshot, not the current clock.",
+  "services": {
+    "checkout": {
+      "metrics": {
+        "window_minutes": 5,
+        "p95_latency_ms": 840,
+        "baseline_p95_latency_ms": 210,
+        "error_rate_percent": 2.4,
+        "baseline_error_rate_percent": 0.1,
+        "requests_per_minute": 1200,
+        "database_pool_max_connections": 10,
+        "database_pool_active_connections": 10,
+        "database_pool_wait_p95_ms": 610,
+        "degradation_started_minutes_ago": 9
+      },
+      "deployments": [
+        {
+          "version": "1.8.2",
+          "minutes_ago": 10,
+          "status": "completed",
+          "changes": ["Reduced database connection pool from 50 to 10 connections"],
+          "previous_version": "1.8.1"
+        },
+        {
+          "version": "1.8.1",
+          "minutes_ago": 1440,
+          "status": "completed",
+          "changes": ["Updated payment receipt formatting"],
+          "previous_version": "1.8.0"
+        }
+      ],
+      "runbook": {
+        "title": "Checkout latency and database connection contention",
+        "checks": [
+          "Compare p95 latency and error rate with their baselines and the deployment timeline.",
+          "Inspect pool utilization, connection wait time and database connection timeout logs.",
+          "Check slow queries and database capacity to distinguish pool contention from a database bottleneck."
+        ],
+        "possible_mitigation": "If connection pool contention is confirmed, ask the service owner to review restoring the previous pool configuration or rolling back version 1.8.2.",
+        "verification": "After an approved mitigation, check that connection waits, p95 latency and error rate return toward baseline.",
+        "requires_human_approval": true
+      }
+    },
+    "catalog": {
+      "metrics": {
+        "window_minutes": 5,
+        "p95_latency_ms": 80,
+        "baseline_p95_latency_ms": 75,
+        "error_rate_percent": 0.05,
+        "baseline_error_rate_percent": 0.05,
+        "requests_per_minute": 2400,
+        "database_pool_max_connections": 30,
+        "database_pool_active_connections": 8,
+        "database_pool_wait_p95_ms": 2,
+        "degradation_started_minutes_ago": null
+      },
+      "deployments": [
+        {
+          "version": "2.3.0",
+          "minutes_ago": 2880,
+          "status": "completed",
+          "changes": ["Added product category filtering"],
+          "previous_version": "2.2.9"
+        }
+      ],
+      "runbook": {
+        "title": "Catalog service health checks",
+        "checks": [
+          "Compare current latency and error rate with their baselines.",
+          "Check database connection waits and the deployment timeline before proposing an incident."
+        ],
+        "possible_mitigation": "If metrics remain near baseline, report that this snapshot shows no evidence of an incident and continue monitoring.",
+        "verification": "Escalate only when new evidence indicates sustained degradation.",
+        "requires_human_approval": true
+      }
+    }
+  }
+}

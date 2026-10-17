@@ -1,0 +1,44 @@
+x-app: &app
+  build: .
+  image: teams-agent:local
+  env_file: ${ENV_FILE:-.env}
+  environment:
+    REDIS_URL: redis://redis:6379/0
+  depends_on:
+    redis:
+      condition: service_healthy
+  init: true
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "always", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+  api:
+    <<: *app
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  worker:
+    <<: *app
+    command: ["teams-agent", "worker"]
+    stop_grace_period: 210s
+  sink:
+    <<: *app
+    profiles: ["demo"]
+    command: ["uvicorn", "teams_agent.demo_sink:app", "--host", "0.0.0.0", "--port", "8001"]
+
+volumes:
+  redis-data:
