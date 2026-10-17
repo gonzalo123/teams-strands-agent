@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Teams: API",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "teams_agent.cli",
+      "args": ["api", "--host", "127.0.0.1", "--port", "8000"],
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONUNBUFFERED": "1",
+        "REDIS_URL": "redis://127.0.0.1:16379/0"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Teams: Worker",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "teams_agent.cli",
+      "args": ["worker"],
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONUNBUFFERED": "1",
+        "REDIS_URL": "redis://127.0.0.1:16379/0",
+        "JOB_TIMEOUT": "600"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "subProcess": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Teams: API + worker",
+      "configurations": ["Teams: API", "Teams: Worker"],
+      "preLaunchTask": "Teams: start Redis",
+      "stopAll": true
+    }
+  ]
+}

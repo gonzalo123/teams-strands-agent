@@ -254,4 +254,4 @@ If the requirements grow into private chats, replies in the original thread, or 
 
 The code lives in `src/teams_agent`, with `settings.py` keeping configuration in one place. The [runbook](RUNBOOK.md) covers the Compose demo and the two Teams configurations. The local demo deliberately waits eight seconds before answering, making it easy to see that the webhook response and the agent execution have separate lifetimes.
 
-And that's all. We can mention the assistant in a channel or start work from a CLI, without making Teams wait for the model.
+And that's all. We can mention the assistant in a channel or start work from a CLI, without making Teams wait for the model. The complete source code is available on [GitHub](https://github.com/gonzalo123/teams-strands-agent).

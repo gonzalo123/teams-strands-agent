@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Teams: start Redis",
+      "type": "process",
+      "command": "docker",
+      "args": ["compose", "-p", "teams-vscode", "up", "-d", "--wait", "redis"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ENV_FILE": "${workspaceFolder}/.env",
+          "REDIS_PORT": "16379"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Teams: stop Redis",
+      "type": "process",
+      "command": "docker",
+      "args": ["compose", "-p", "teams-vscode", "stop", "redis"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ENV_FILE": "${workspaceFolder}/.env",
+          "REDIS_PORT": "16379"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

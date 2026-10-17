@@ -27,6 +27,11 @@ build-backend = "poetry.core.masonry.api"
 [project.scripts]
 teams-agent = "teams_agent.cli:main"
 
+[project.urls]
+Homepage = "https://gonzalo123.com"
+Repository = "https://github.com/gonzalo123/teams-strands-agent"
+Issues = "https://github.com/gonzalo123/teams-strands-agent/issues"
+
 [tool.poetry]
 packages = [{include = "teams_agent", from = "src"}]
 
